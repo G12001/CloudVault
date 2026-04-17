@@ -1,0 +1,2 @@
+{"level":"info","message":"Connecting to MongoDB...","service":"cloudvault-api","timestamp":"2026-04-18 00:46:48"}
+{"level":"info","message":"MongoDB connected successfully","service":"cloudvault-api","timestamp":"2026-04-18 00:46:48"}
