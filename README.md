@@ -1,36 +1,207 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CloudVault - File Manager Application
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+A full-stack, production-ready file management application with cloud storage integration, real-time uploads, and comprehensive user authentication.
+
+---
+
+## Key Achievements & Features
+
+### 🔐 Authentication & Security
+
+- **NextAuth.js JWT Authentication** - Secure credential-based login with password hashing (bcryptjs)
+- **Protected Routes** - Server-side session validation via middleware with automatic redirects
+- **Authorization Checks** - Granular permission validation on all sensitive operations
+- **Session Management** - Persistent user sessions with logout functionality
+
+### 📁 File Management
+
+- **Cloud Storage Integration** - AWS S3 SDK v3 for scalable file storage with presigned URLs
+- **File Operations** - Upload, download, preview, rename, and delete with error handling
+- **Hierarchical Organization** - Nested folder structure with parent-child relationships
+- **Real-time Upload Queue** - Multiple file uploads with individual progress tracking and status indicators
+- **File Thumbnails** - Automatic thumbnail generation for images with fallback icons for other file types
+
+### 💾 Data Persistence
+
+- **MongoDB Integration** - Mongoose v8.20 with three core models:
+  - User (credentials, metadata)
+  - File (metadata, S3 references, relationships)
+  - Folder (hierarchy, organization)
+- **Atomic Operations** - Transaction support for data consistency during uploads/deletes
+
+### 🎨 User Interface
+
+- **Modern Design System** - Glassmorphism effects with backdrop blur and transparency
+- **Dark Mode Support** - Full dark/light theme toggle with localStorage persistence and system preference detection
+- **Modal-Based UX** - Professional modals replacing browser prompts:
+  - Upload Modal with drag-and-drop interface
+  - File Preview Modal with image/PDF support
+  - Rename Modal for files and folders
+  - Delete Confirmation Modal with warnings
+  - Create Folder Modal with validation
+- **Responsive Grid** - 5-column adaptive file grid with hover effects and file type icons
+- **Storage Visualization** - Progress bar with color-coded storage usage (0-50%, 50-80%, 80%+)
+- **Toast Notifications** - Non-intrusive feedback system with success/error/info types
+- **Sidebar Navigation** - Expandable folder tree with real-time updates
+
+### 🚀 Technical Implementation
+
+- **Next.js 16** with App Router, TypeScript 5, and Server Components
+- **React 19** with Hooks (useState, useEffect, useCallback, useContext)
+- **Tailwind CSS v4** - Class-based dark mode with responsive design
+- **Framer Motion v12** - Smooth animations and transitions
+- **Lucide React v0.556** - Professional icon library
+- **Form Validation** - Client-side validation with error states
+- **API Design** - RESTful endpoints with proper HTTP methods and status codes
+
+### 🔧 Developer Experience
+
+- **TypeScript** - Full type safety across all components
+- **Error Handling** - Comprehensive try-catch blocks with user-friendly messages
+- **Performance Optimization** - useCallback memoization, lazy loading, request deduplication
+- **Code Quality** - ESLint configuration with Turbopack for fast builds
+- **Environment Configuration** - Environment variable support for API keys and endpoints
+
+---
+
+## Technologies Used
+
+**Frontend:**
+
+- Next.js 16, React 19, TypeScript 5
+- Tailwind CSS v4, Framer Motion
+- Lucide React (Icons)
+
+**Backend:**
+
+- Next.js API Routes
+- NextAuth.js v4.24.13
+- Node.js
+
+**Database:**
+
+- MongoDB with Mongoose v8.20
+
+**Cloud Services:**
+
+- AWS S3 SDK v3.933.0 (File Storage)
+
+**Development Tools:**
+
+- ESLint, Turbopack
+- PostCSS
+
+---
+
+## Project Impact
+
+✅ **Production Ready** - All critical features implemented with proper error handling
+✅ **Security Focused** - Authentication, authorization, and data validation throughout
+✅ **User Centric** - Modern UI with smooth interactions and helpful feedback
+✅ **Scalable Architecture** - Cloud storage enables unlimited file capacity
+✅ **Professional Polish** - Glassmorphic design with comprehensive dark mode support
+
+---
+
+## Installation & Running
 
 ```bash
+# Install dependencies
+npm install
+
+# Configure environment variables (.env.local)
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret
+MONGODB_URI=your-mongodb-connection
+AWS_REGION=your-region
+AWS_ACCESS_KEY_ID=your-key
+AWS_SECRET_ACCESS_KEY=your-secret
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── dashboard/        # Main file management interface
+│   ├── login/            # Authentication page
+│   ├── register/         # User registration
+│   ├── api/              # Backend endpoints
+│   │   ├── auth/         # Authentication routes
+│   │   ├── files/        # File operations (CRUD)
+│   │   ├── folders/      # Folder management
+│   │   └── upload-url/   # S3 presigned URLs
+│   ├── models/           # Database schemas
+│   ├── layout.tsx        # Root layout with providers
+│   └── globals.css       # Global styles
+├── components/           # Reusable React components
+│   ├── FileGrid.tsx      # File display with thumbnails
+│   ├── SidebarFolderTree.tsx  # Folder navigation
+│   ├── UploadModal.tsx   # File upload interface
+│   ├── FilePreviewModal.tsx   # File viewing
+│   ├── RenameFileModal.tsx    # File renaming
+│   ├── DeleteFileModal.tsx    # Delete confirmation
+│   ├── CreateFolderModal.tsx  # Folder creation
+│   ├── Toast.tsx         # Notifications
+│   ├── ThemeToggle.tsx   # Dark mode switcher
+│   ├── Providers.tsx     # React Context providers
+│   └── ProtectedRoute.tsx     # Route protection
+└── lib/
+    ├── auth.ts          # NextAuth configuration
+    └── db.ts            # MongoDB connection
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Key Learning Outcomes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Full-Stack Development** - Mastered Next.js for both frontend and backend
+2. **Cloud Architecture** - Integrated AWS S3 with proper security practices
+3. **Database Design** - Hierarchical data modeling with MongoDB
+4. **Authentication** - Implemented secure JWT-based auth system
+5. **UI/UX Design** - Created modern, accessible interface with dark mode
+6. **Performance** - Optimized React with memoization and lazy loading
+7. **TypeScript** - Leveraged strict typing for robust code
+8. **Error Handling** - Built comprehensive error feedback system
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Future Enhancements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- File versioning and rollback
+- Sharing and permission system
+- Collaborative editing
+- Advanced search and filtering
+- File tagging and categorization
+- Bulk operations
+- Audit logging
+- Two-factor authentication
+- File encryption
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## GitHub Repository
+
+[Your GitHub Link]
+
+## Live Demo
+
+[Your Live Demo Link]
+
+---
+
+**Created by:** [Your Name]  
+**Date:** February 2026  
+**Duration:** [Project Timeline]  
+**Status:** Complete & Production Ready
