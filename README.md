@@ -119,12 +119,23 @@ AWS_REGION=your-region
 AWS_ACCESS_KEY_ID=your-key
 AWS_SECRET_ACCESS_KEY=your-secret
 
+# Optional: Logging configuration
+LOG_LEVEL=info # error, warn, info, debug
+ENABLE_FILE_LOGGING=true # Set to false for serverless environments
+
 # Run development server
 npm run dev
 
 # Build for production
 npm run build
 npm start
+
+## 🚀 Vercel Deployment
+
+This application is optimized for Vercel deployment. See [DEPLOYMENT_GUIDE_VERCEL.md](./DEPLOYMENT_GUIDE_VERCEL.md) for complete deployment instructions.
+
+### Quick Deploy
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/cloudvault)
 ```
 
 ---

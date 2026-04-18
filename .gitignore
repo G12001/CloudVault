@@ -43,3 +43,4 @@ next-env.d.ts
 # code review documents
 CloudVault_Code_Review.docx
 PROJECT_SUMMARY.md
+DEPLOYMENT_GUIDE_VERCEL.md

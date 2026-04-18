@@ -7,31 +7,12 @@ const logFormat = winston.format.combine(
   winston.format.json(),
 );
 
-// Create logger instance
-const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || "info",
-  format: logFormat,
-  defaultMeta: { service: "cloudvault-api" },
-  transports: [
-    // Write all logs with level 'error' and below to error.log
-    new winston.transports.File({
-      filename: "logs/error.log",
-      level: "error",
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-    // Write all logs with level 'info' and below to combined.log
-    new winston.transports.File({
-      filename: "logs/combined.log",
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-  ],
-});
+// Create logger instance with safe configuration
+const createSafeLogger = () => {
+  const transports: winston.transport[] = [];
 
-// Add console transport for non-production environments
-if (process.env.NODE_ENV !== "production") {
-  logger.add(
+  // Always add console transport - this works everywhere
+  transports.push(
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
@@ -39,6 +20,71 @@ if (process.env.NODE_ENV !== "production") {
       ),
     }),
   );
+
+  // For serverless environments, we should avoid file transports entirely
+  // Check if we're likely in a serverless environment (common serverless platform env vars)
+  // Vercel provides VERCEL_ENV which can be 'production', 'preview', or 'development'
+  const isServerless =
+    process.env.VERCEL ||
+    process.env.VERCEL_ENV ||
+    process.env.AWS_LAMBDA_FUNCTION_NAME ||
+    process.env.NETLIFY ||
+    process.env.NODE_ENV === "production";
+
+  // Only add file transports if we're NOT in a serverless environment
+  // and file logging is explicitly enabled
+  if (!isServerless && process.env.ENABLE_FILE_LOGGING !== "false") {
+    try {
+      transports.push(
+        new winston.transports.File({
+          filename: "logs/error.log",
+          level: "error",
+          maxsize: 5242880, // 5MB
+          maxFiles: 5,
+        }),
+      );
+      transports.push(
+        new winston.transports.File({
+          filename: "logs/combined.log",
+          maxsize: 5242880, // 5MB
+          maxFiles: 5,
+        }),
+      );
+    } catch (error) {
+      // If file transport creation fails, log to console and continue with console only
+      console.warn("File logging disabled due to error:", error.message);
+    }
+  } else {
+    console.log("File logging disabled - using console transport only");
+  }
+
+  return winston.createLogger({
+    level: process.env.LOG_LEVEL || "info",
+    format: logFormat,
+    defaultMeta: { service: "cloudvault-api" },
+    transports,
+    // Silently ignore any errors from transports
+    silent: process.env.LOG_SILENT === "true",
+  });
+};
+
+let logger: winston.Logger;
+
+try {
+  logger = createSafeLogger();
+} catch (error) {
+  // Fallback to simple console logging if Winston fails completely
+  console.error(
+    "Winston logger failed to initialize, using console fallback:",
+    error.message,
+  );
+
+  // Create a minimal console-only logger
+  logger = winston.createLogger({
+    level: process.env.LOG_LEVEL || "info",
+    format: winston.format.simple(),
+    transports: [new winston.transports.Console()],
+  });
 }
 
 // Logging utility functions
