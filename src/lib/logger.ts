@@ -52,7 +52,10 @@ const createSafeLogger = () => {
       );
     } catch (error) {
       // If file transport creation fails, log to console and continue with console only
-      console.warn("File logging disabled due to error:", error.message);
+      console.warn(
+        "File logging disabled due to error:",
+        error instanceof Error ? error.message : String(error),
+      );
     }
   } else {
     console.log("File logging disabled - using console transport only");
@@ -76,7 +79,7 @@ try {
   // Fallback to simple console logging if Winston fails completely
   console.error(
     "Winston logger failed to initialize, using console fallback:",
-    error.message,
+    error instanceof Error ? error.message : String(error),
   );
 
   // Create a minimal console-only logger
