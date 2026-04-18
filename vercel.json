@@ -1,9 +1,15 @@
 {
-  "version": 3,
+  "version": 2,
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/next"
+      "use": "@vercel/next",
+      "config": {
+        "env": {
+          "ENABLE_FILE_LOGGING": "false",
+          "LOG_LEVEL": "info"
+        }
+      }
     }
   ],
   "routes": [
@@ -23,15 +29,6 @@
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
     }
   ],
-  "env": {
-    "ENABLE_FILE_LOGGING": "false",
-    "LOG_LEVEL": "info"
-  },
-  "functions": {
-    "api/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "regions": ["iad1"],
   "cleanUrls": true,
   "trailingSlash": false
